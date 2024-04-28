@@ -1,0 +1,108 @@
+-- Table `students`
+CREATE TABLE `students` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `FirstName` VARCHAR(255) NOT NULL,
+  `LastName` VARCHAR(255) NOT NULL,
+  `EnrollmentDate` DATE NOT NULL,
+  `Address` VARCHAR(255),
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `lecturers`
+CREATE TABLE `lecturers` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `FirstName` VARCHAR(255) NOT NULL,
+  `LastName` VARCHAR(255) NOT NULL,
+  `Title` VARCHAR(255),
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `subjects`
+CREATE TABLE `subjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  `Description` TEXT,
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `courses`
+CREATE TABLE `courses` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  `Description` TEXT,
+  `Price` DECIMAL(10, 2),
+  `Level` VARCHAR(255),
+  `StartDate` DATETIME,
+  `EndDate` DATETIME,
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `payments`
+CREATE TABLE `payments` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `DateOfPayment` DATETIME NOT NULL,
+  `Amount` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `enrollments`
+CREATE TABLE `enrollments` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `CourseId` INT NOT NULL,
+  `StudentId` INT NOT NULL,
+  `PaymentId` INT NOT NULL,
+  `FinalScoreId` INT,
+  `CreatedOn` DATETIME NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
+  FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`),
+  FOREIGN KEY (`PaymentId`) REFERENCES `payments`(`Id`)
+);
+
+-- Table `lecturersSubjects`
+CREATE TABLE `lecturersSubjects` (
+  `LecturerId` INT NOT NULL,
+  `SubjectId` INT NOT NULL,
+  `CreatedOn` DATETIME NOT NULL,
+  PRIMARY KEY (`LecturerId`, `SubjectId`),
+  FOREIGN KEY (`LecturerId`) REFERENCES `lecturers`(`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
+);
+
+-- Table `coursesSubjects`
+CREATE TABLE `coursesSubjects` (
+  `CourseId` INT NOT NULL,
+  `SubjectId` INT NOT NULL,
+  `Active` BOOLEAN NOT NULL,
+  `CreatedOn` DATETIME NOT NULL,
+  PRIMARY KEY (`CourseId`, `SubjectId`),
+  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
+);
+
+-- Table `grades`
+CREATE TABLE `grades` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Value` DOUBLE NOT NULL,
+  `Percent` DOUBLE NOT NULL,
+  `DateOfReceive` DATETIME NOT NULL,
+  `IsFinal` BOOLEAN NOT NULL,
+  `SubjectId` INT NOT NULL,
+  `EnrollmentId` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`),
+  FOREIGN KEY (`EnrollmentId`) REFERENCES `enrollments`(`Id`)
+);
+
+-- Table `FinalScore`
+CREATE TABLE `FinalScore` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Average` DOUBLE NOT NULL,
+  `Grade` DECIMAL(3, 2) NOT NULL,
+  PRIMARY KEY (`Id`)
+);
+
+-- Alter table `enrollments` to add a foreign key for `FinalScore`
+ALTER TABLE `enrollments`
+  ADD CONSTRAINT `FK_FinalScoreId`
+  FOREIGN KEY (`FinalScoreId`) REFERENCES `FinalScore`(`Id`);
