@@ -9,7 +9,7 @@ db_config = {
     'user':'root',
     'host':'localhost',
     'database':'bootcampit',
-    'passwd':'123456'
+    'passwd':'qwert'
 }
 
 # Connect to the MySQL database
@@ -26,6 +26,48 @@ def db_connection_close(cursor, conn):
         cursor.close()
     if conn:
         conn.close()
+
+# Route to get all students
+@app.route('/students', methods=['GET'])
+def get_students():
+    conn = db_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM students"
+    try:
+        cursor.execute(query)
+        students = [
+            dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4])
+            for row in cursor.fetchall()
+        ]
+        if students:
+            return jsonify(students), 200
+        else:
+            return jsonify(message="No students found"), 404
+    except Error as e:
+        print(e)
+        return jsonify(message="An error occurred"), 500
+    finally:
+        db_connection_close(cursor, conn)
+
+# Route to get a single student by ID
+@app.route('/students/<int:student_id>', methods=['GET'])
+def get_student(student_id):
+    conn = db_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM students WHERE Id = %s"
+    try:
+        cursor.execute(query, (student_id,))
+        row = cursor.fetchone()
+        if row:
+            student = dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4])
+            return jsonify(student), 200
+        else:
+            return jsonify(message="Student not found"), 404
+    except Error as e:
+        print(e)
+        return jsonify(message="An error occurred"), 500
+    finally:
+        db_connection_close(cursor, conn)
 
 # Route to create a new student
 @app.route('/students', methods=['POST'])
