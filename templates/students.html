@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students</title>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <h2>Students List</h2>
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Enrollment date</th>
+                    <th>Address</Address></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.firstName }}</td>
+                    <td>{{ student.lastName }}</td>
+                    <td>{{ student.enrollmentDate }}</td>
+                    <td>{{ student.address }}</td>
+                    <td>
+                        <form action="/update_student/{{student.id}}"method="post">
+                            <input type="hidden" name="student_id" value="{{ student.id }}">
+                            <input type="submit" value="Update">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/delete_student/{{student.id}}"method="post">
+                            <input type="hidden" name="student_id" value="{{ student.id }}">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <h2>Add new student</h2>
+        <form action="/students" method="post">
+            <label for="firstName">Enter students First name:</label>
+            <input type="text" id="firstName" name="firstName" required> <br>
+            <label for="lastName">Enter students Last name:</label>
+            <input type="text" id="lastName" name="lastName" required> <br>
+            <label for="enrollmentDate">Enter students enrollment date:</label>
+            <input type="date" id="enrollmentDate" name="enrollmentDate" required> <br>
+            <label for="address">Enter students address:</label>
+            <input type="text" id="address" name="address" optional> <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <a href="/">Back to Home</a>
+</body>
+</html>

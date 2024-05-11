@@ -1,22 +1,14 @@
 import mysql.connector
 from mysql.connector import Error
-from flask import Flask, request, jsonify
-
+from flask import Flask, request, redirect, jsonify, render_template
+import config
 app = Flask(__name__)
-
-# Configuration for the MySQL connection
-db_config = {
-    'user':'root',
-    'host':'localhost',
-    'database':'bootcampit',
-    'passwd':'qwert'
-}
 
 # Connect to the MySQL database
 def db_connection():
     conn = None
     try:
-        conn = mysql.connector.connect(**db_config)
+        conn = mysql.connector.connect(**config.db_config)
     except Error as e:
         print(e)
     return conn
@@ -40,7 +32,7 @@ def get_students():
             for row in cursor.fetchall()
         ]
         if students:
-            return jsonify(students), 200
+            return render_template('students.html', students=students)
         else:
             return jsonify(message="No students found"), 404
     except Error as e:
@@ -72,11 +64,11 @@ def get_student(student_id):
 # Route to create a new student
 @app.route('/students', methods=['POST'])
 def create_student():
-    data = request.get_json()
-    first_name = data['firstName']
-    last_name = data['lastName']
-    enrollment_date = data['enrollmentDate']
-    address = data.get('address', None) # Address is optional
+    # data = request.get_json()
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    enrollment_date = request.form['enrollmentDate']
+    address = request.form['address']
 
     query = """
     INSERT INTO students (FirstName, LastName, EnrollmentDate, Address)
@@ -89,7 +81,8 @@ def create_student():
     try:
         cursor.execute(query, (first_name, last_name, enrollment_date, address))
         conn.commit()
-        return jsonify(message="Student added successfully"), 201
+        return redirect('/students')
+        # return jsonify(message="Student added successfully"), 201
     except Error as e:
         print(e)
         return jsonify(message="An error occured"), 500
@@ -97,17 +90,19 @@ def create_student():
         db_connection_close(cursor, conn)
 
 # Route to delete a student
-@app.route('/students/<int:student_id>', methods=['DELETE'])
+@app.route('/delete_student/<int:student_id>', methods=['POST'])
 def delete_student(student_id):
+    student_id = str(student_id)
+    # request.form.get['student_id']
+    print(student_id)
     query = "DELETE FROM students WHERE Id = %s"
     conn = db_connection()
     cursor = conn.cursor()
-
     try:
         cursor.execute(query, (student_id,))
         conn.commit()
         if cursor.rowcount > 0:
-            return jsonify(message="Student deleted successfully"), 200
+            return redirect('/students')
         else:
             return jsonify(message="Student not found"), 404
     except Error as e:
@@ -117,7 +112,7 @@ def delete_student(student_id):
         db_connection_close(cursor, conn)
 
 # Route to update a student
-@app.route('/students/<int:student_id>', methods=['PUT'])
+@app.route('/update_students/<int:student_id>', methods=['POST'])
 def update_student(student_id):
     data = request.get_json()
     first_name = data.get('firstName')
@@ -166,5 +161,13 @@ def update_student(student_id):
         db_connection_close(cursor, conn)
 
 
+
+#Route to main page
+@app.route('/')
+def index():
+    return render_template('./index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+    
