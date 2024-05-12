@@ -22,20 +22,14 @@
             <tbody>
                 {% for student in students %}
                 <tr>
-                    <td>{{ student.firstName }}</td>
-                    <td>{{ student.lastName }}</td>
-                    <td>{{ student.enrollmentDate }}</td>
-                    <td>{{ student.address }}</td>
-                    <td>
-                        <form class="updateForm" action="/update_student/{{ student.id }}" method="POST" style="display: none;">
-                            <td><input type="text" name="firstName" value="{{ student.firstName }}"></td>
-                            <td><input type="text" name="lastName" value="{{ student.lastName }}"></td>
-                            <td><input type="date" name="enrollmentDate" value="{{ student.enrollmentDate }}"></td>
-                            <td><input type="text" name="address" value="{{ student.address }}"></td>
-                            <input type="hidden" name="student_id" value="{{ student.id }}">
-                            <td><input type="submit" value="Update"></td>
-                        </form>
-                    </td>
+                    <form class="updateForm" action="/update_student/{{ student.id }}" method="POST" style="display: none;">
+                        <td><input type="text" name="firstName" placeholder="{{ student.firstName }}"></td>
+                        <td><input type="text" name="lastName" placeholder="{{ student.lastName }}"></td>
+                        <td><input type="text" name="enrollmentDate" placeholder="{{ student.enrollmentDate }}"></td>
+                        <td><input type="text" name="address" placeholder="{{ student.address }}"></td>
+                        <input type="hidden" name="student_id" placeholder="{{ student.id }}">
+                        <td><input type="submit" value="Update"></td>
+                    </form>
                     <td>
                         <form action="/delete_student/{{student.id}}"method="post">
                             <input type="hidden" name="student_id" value="{{ student.id }}">
@@ -58,7 +52,7 @@
             <label for="enrollmentDate">Enter students enrollment date:</label>
             <input type="date" id="enrollmentDate" name="enrollmentDate" required> <br>
             <label for="address">Enter students address:</label>
-            <input type="text" id="address" name="address" optional> <br>
+            <input type="text" id="address" name="address" required> <br>
             <button type="submit">Submit</button>
         </form>
     </div>

@@ -4,3 +4,11 @@ INSERT INTO students (FirstName, LastName, EnrollmentDate, Address) VALUES
 ('Michael', 'Johnson', '2023-07-10', '789 Oak Street'),
 ('Emily', 'Brown', '2023-06-05', '1011 Pine Street'),
 ('David', 'Wilson', '2023-05-03', '1213 Maple Street');
+
+
+INSERT INTO lecturers (FirstName, LastName, Title) VALUES
+('John', 'Doe', 'Professor'),
+('Alice', 'Smith', 'Associate Professor'),
+('Michael', 'Johnson', 'Assistant Professor'),
+('Emily', 'Brown', NULL),
+('David', 'Lee', 'Lecturer');
