@@ -27,9 +27,13 @@
                     <td>{{ student.enrollmentDate }}</td>
                     <td>{{ student.address }}</td>
                     <td>
-                        <form action="/update_student/{{student.id}}"method="post">
+                        <form class="updateForm" action="/update_student/{{ student.id }}" method="POST" style="display: none;">
+                            <td><input type="text" name="firstName" value="{{ student.firstName }}"></td>
+                            <td><input type="text" name="lastName" value="{{ student.lastName }}"></td>
+                            <td><input type="date" name="enrollmentDate" value="{{ student.enrollmentDate }}"></td>
+                            <td><input type="text" name="address" value="{{ student.address }}"></td>
                             <input type="hidden" name="student_id" value="{{ student.id }}">
-                            <input type="submit" value="Update">
+                            <td><input type="submit" value="Update"></td>
                         </form>
                     </td>
                     <td>

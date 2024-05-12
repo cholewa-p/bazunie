@@ -112,13 +112,14 @@ def delete_student(student_id):
         db_connection_close(cursor, conn)
 
 # Route to update a student
-@app.route('/update_students/<int:student_id>', methods=['POST'])
+@app.route('/update_student/<int:student_id>', methods=['POST'])
 def update_student(student_id):
-    data = request.get_json()
-    first_name = data.get('firstName')
-    last_name = data.get('lastName')
-    enrollment_date = data.get('enrollmentDate')
-    address = data.get('address')
+    student_id = str(student_id)
+    # data = request.get_json()
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    enrollment_date = request.form['enrollmentDate']
+    address = request.form['address']
 
     conn = db_connection()
     cursor = conn.cursor()
@@ -151,7 +152,7 @@ def update_student(student_id):
         cursor.execute(query, values)
         conn.commit()
         if cursor.rowcount > 0:
-            return jsonify(message="Student updated successfully"), 200
+            return redirect('/students')
         else:
             return jsonify(message="Student not found"), 404
     except Error as e:
