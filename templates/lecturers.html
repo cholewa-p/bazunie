@@ -18,17 +18,58 @@
                     <th>Title</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                {% for lecturer in lecturers %}
-                    <td><input type="text" name="firstName" placeholder={{ lecturer.firstName }}> </td>
-                    <td><input type="text" name="lastName" placeholder={{ lecturer.lastName }}> </td>
-                    <td><input type="text" name="title" placeholder={{ lecturer.title }}> </td>
-                </tr> 
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <a href="/">Back to Home</a>
+
+<tbody>
+    {% for lecturer in lecturers %}
+    <tr>
+        <form class="updateForm" action="/update_lecturer/{{ lecturer.id }}" method="POST" style="display: none;">
+            <td><input type="text" name="firstName" placeholder="{{ lecturer.firstName }}"></td>
+            <td><input type="text" name="lastName" placeholder="{{ lecturer.lastName }}"></td>
+
+
+            <!-- <td><input type="text" name="title" placeholder="{{ lecturer.title }}"></td> -->
+            <td><input list="title" name="title" placeholder="{{ lecturer.title }}">
+                <datalist id="title">
+                    <option value="Professor">
+                    <option value="Associate Professor">
+                    <option value="Assistant Professor">
+                    <option value="Lecturer">
+                    <option value="None">
+                </option>
+            </td>
+            <input type="hidden" name="lecturer_id" placeholder="{{ lecturer.id }}">
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <td>
+            <form action="/delete_lecturer/{{lecturer.id}}"method="post">
+                <input type="hidden" name="lecturer_id" value="{{ lecturer.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<div class="container">
+<h2>Add new lecturer</h2>
+<form action="/lecturers" method="post">
+<label for="firstName">Enter lecturers First name:</label>
+<input type="text" id="firstName" name="firstName" required> <br>
+<label for="lastName">Enter lecturers Last name:</label>
+<input type="text" id="lastName" name="lastName" required> <br>
+<label for="title">Choose lecturers title:</label>
+<select name="title" id="title">
+  <option value="Professor">Professor</option>
+  <option value="Associate Professor">Associate Professor</option>
+  <option value="Assistant Professor">Assistant Professor</option>
+  <option value="Lecturer">Lecturer</option>
+  <option value="None">None</option>
+</select> 
+<button type="submit">Submit</button>
+</form>
+</div>
+<a href="/">Back to Home</a>
 </body>
 </html>
