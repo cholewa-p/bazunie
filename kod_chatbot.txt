@@ -32,8 +32,6 @@ CREATE TABLE `courses` (
   `Description` TEXT,
   `Price` DECIMAL(10, 2),
   `Level` VARCHAR(255),
-  `StartDate` DATETIME,
-  `EndDate` DATETIME,
   PRIMARY KEY (`Id`)
 );
 

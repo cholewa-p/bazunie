@@ -5,10 +5,19 @@ INSERT INTO students (FirstName, LastName, EnrollmentDate, Address) VALUES
 ('Emily', 'Brown', '2023-06-05', '1011 Pine Street'),
 ('David', 'Wilson', '2023-05-03', '1213 Maple Street');
 
-
 INSERT INTO lecturers (FirstName, LastName, Title) VALUES
 ('John', 'Doe', 'Professor'),
 ('Alice', 'Smith', 'Associate Professor'),
 ('Michael', 'Johnson', 'Assistant Professor'),
 ('Emily', 'Brown', NULL),
 ('David', 'Lee', 'Lecturer');
+
+INSERT INTO courses (Id, Name, Description,Price, Level) VALUES
+(1, 'Java 101','Inroduction to Java',700,'Beginner'),
+(2, 'Python 101','Inroduction to Python',1000,'Beginner'),
+(3, 'Project Management 101','Inroduction to Project Management',500,'Beginner');
+
+INSERT INTO payments (Id, Amount, DateOfPayment) VALUES
+(1, 1000, '2023-01-10'),
+(2, 1500, '2023-02-15'),
+(3, 1200, '2023-03-20');
