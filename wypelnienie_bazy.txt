@@ -21,3 +21,32 @@ INSERT INTO payments (Id, Amount, DateOfPayment) VALUES
 (1, 1000, '2023-01-10'),
 (2, 1500, '2023-02-15'),
 (3, 1200, '2023-03-20');
+
+INSERT INTO enrollments (Id,CourseId, StudentId, PaymentId, FinalScoreId, CreatedOn) VALUES
+(2, 2, 2,2, NULL, '2023-02-20 11:00:00'),
+(3, 3, 3,3, NULL, '2023-03-25 12:00:00');
+
+-- Insert sample data into subjects
+INSERT INTO `subjects` (`Name`, `Description`) VALUES
+('Object-Oriented Programming in Java', 'This subject covers the principles of object-oriented programming (OOP) using the Java programming language. It includes concepts such as classes, objects, inheritance, polymorphism, encapsulation, and abstraction.'),
+('Machine Learning in Python', 'This subject explores machine learning concepts and techniques using the Python programming language. It includes topics such as supervised learning, unsupervised learning, neural networks, and the use of libraries like TensorFlow and scikit-learn.'),
+('Agile Project Management', 'This subject focuses on Agile project management methodologies, including Scrum and Kanban. It covers principles and practices for managing projects in a flexible and iterative manner, with an emphasis on collaboration, customer feedback, and continuous improvement.'),
+('Data Structures and Algorithms in Java', 'This subject provides an in-depth look at data structures and algorithms using Java. It includes topics such as arrays, linked lists, stacks, queues, trees, graphs, and sorting/searching algorithms.'),
+('Web Development with Python and Flask', 'This subject teaches web development using the Python programming language and the Flask web framework. It covers topics such as routing, templates, forms, and database integration.'),
+('Project Risk Management', 'This subject addresses the identification, assessment, and management of risks in project management. It includes strategies for mitigating risks and ensuring project success despite uncertainties.');
+
+insert into coursesSubjects (CourseId,SubjectId) values
+(1,1),
+(2,2),
+(3,3),
+(1,4),
+(2,5),
+(3,6);
+
+insert into lecturersSubjects values
+(1,1),
+(2,2),
+(3,3),
+(3,4),
+(4,5),
+(5,6);

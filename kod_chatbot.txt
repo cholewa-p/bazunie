@@ -61,7 +61,6 @@ CREATE TABLE `enrollments` (
 CREATE TABLE `lecturersSubjects` (
   `LecturerId` INT NOT NULL,
   `SubjectId` INT NOT NULL,
-  `CreatedOn` DATETIME NOT NULL,
   PRIMARY KEY (`LecturerId`, `SubjectId`),
   FOREIGN KEY (`LecturerId`) REFERENCES `lecturers`(`Id`),
   FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
@@ -71,8 +70,6 @@ CREATE TABLE `lecturersSubjects` (
 CREATE TABLE `coursesSubjects` (
   `CourseId` INT NOT NULL,
   `SubjectId` INT NOT NULL,
-  `Active` BOOLEAN NOT NULL,
-  `CreatedOn` DATETIME NOT NULL,
   PRIMARY KEY (`CourseId`, `SubjectId`),
   FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
   FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)

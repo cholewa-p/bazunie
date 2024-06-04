@@ -18,4 +18,7 @@ def get_enrollments():
     except Error as e:
         print(e)
         return render_template('error.html', error_message=e)
-            
+### to do
+#### enrollments to have the same ID as the student
+#### add new table connecting enrolments and payments so that they can be divided into multiple payments
+#### 
