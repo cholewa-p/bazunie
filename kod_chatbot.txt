@@ -1,13 +1,3 @@
--- Table `students`
-CREATE TABLE `students` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `FirstName` VARCHAR(255) NOT NULL,
-  `LastName` VARCHAR(255) NOT NULL,
-  `EnrollmentDate` DATE NOT NULL,
-  `Address` VARCHAR(255),
-  PRIMARY KEY (`Id`)
-);
-
 -- Table `lecturers`
 CREATE TABLE `lecturers` (
   `Id` INT NOT NULL AUTO_INCREMENT,
@@ -43,19 +33,26 @@ CREATE TABLE `payments` (
   PRIMARY KEY (`Id`)
 );
 
--- Table `enrollments`
-CREATE TABLE `enrollments` (
+-- Table `students`
+CREATE TABLE `students` (
   `Id` INT NOT NULL AUTO_INCREMENT,
+  `FirstName` VARCHAR(255) NOT NULL,
+  `LastName` VARCHAR(255) NOT NULL,
+  `EnrollmentDate` DATE NOT NULL,
+  `Address` VARCHAR(255),
   `CourseId` INT NOT NULL,
-  `StudentId` INT NOT NULL,
-  `PaymentId` INT NOT NULL,
-  `FinalScoreId` INT,
-  `CreatedOn` DATETIME NOT NULL,
   PRIMARY KEY (`Id`),
   FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
+);
+
+CREATE TABLE `studentsPayments` (
+  `StudentId` INT NOT NULL,
+  `PaymentId` INT NOT NULL,
+  PRIMARY KEY (`StudentId`, `PaymentId`),
   FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`),
   FOREIGN KEY (`PaymentId`) REFERENCES `payments`(`Id`)
 );
+
 
 -- Table `lecturersSubjects`
 CREATE TABLE `lecturersSubjects` (
@@ -83,21 +80,8 @@ CREATE TABLE `grades` (
   `DateOfReceive` DATETIME NOT NULL,
   `IsFinal` BOOLEAN NOT NULL,
   `SubjectId` INT NOT NULL,
-  `EnrollmentId` INT NOT NULL,
+  `StudentId` INT NOT NULL,
   PRIMARY KEY (`Id`),
   FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`),
-  FOREIGN KEY (`EnrollmentId`) REFERENCES `enrollments`(`Id`)
+  FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`)
 );
-
--- Table `FinalScore`
-CREATE TABLE `FinalScore` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Average` DOUBLE NOT NULL,
-  `Grade` DECIMAL(3, 2) NOT NULL,
-  PRIMARY KEY (`Id`)
-);
-
--- Alter table `enrollments` to add a foreign key for `FinalScore`
-ALTER TABLE `enrollments`
-  ADD CONSTRAINT `FK_FinalScoreId`
-  FOREIGN KEY (`FinalScoreId`) REFERENCES `FinalScore`(`Id`);
