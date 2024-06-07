@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <h2>Courses List</h2>
+        <table id="coursesTable">
+            <thead>
+                <tr>
+                    <th>Course name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Level</th>
+                    <th>Course ID</th>
+                </tr>
+            </thead>
+
+<tbody>
+    {% for course in courses %}
+    <tr>
+        <form class="updateForm" action="/update_course/{{ course.id }}" method="POST" style="display: none;">
+            <td><input type="text" name="courseName" placeholder="{{ course.name }}"></td>
+            <td><input type="text" name="description" placeholder="{{ course.description }}"></td>
+            <td><input type="text" name="price" placeholder="{{ course.price }}"></td>
+            <td><input list="level" name="level" placeholder="{{ course.level }}">
+                <datalist id="level">
+                    <option value="Beginner">
+                    <option value="Intermediate">
+                    <option value="Advanced">
+                </option>
+            </td>
+            <!-- <td><input type="text" name="level" placeholder="{{ course.level }}"></td> -->
+            <td>{{ course.id }}</td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <td>
+            <form action="/delete_course/{{course.id}}"method="post">
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<div class="container">
+<h2>Add new course</h2>
+<form action="/courses" method="post">
+<label for="name">Enter courses name:</label>
+<input type="text" id="name" name="name" required> <br>
+<label for="description">Enter courses description:</label>
+<input type="text" id="description" name="description" required> <br>
+<label for="price">Enter courses price:</label>
+<input type="text" id="price" name="price" required> <br>
+<label for="level">Choose courses level:</label>
+<select name="level" id="level">
+  <option value="Beginner">Beginner</option>
+  <option value="Intermediate">Intermediate</option>
+  <option value="Advanced">Advanced</option>
+</select> 
+<button type="submit">Submit</button>
+</form>
+</div>
+
+<h2> Link course with the student</h2>
+<form action="/link_courses" method="post"></form>
+<label for="courseId">Enter course ID:</label>
+<input type="text" id="courseId" name="courseId" required> <br>
+<label for="studentId">Enter student ID:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
+<button type="submit">Submit</button><br>
+</form>
+<a href="/">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments</title>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <h2>Payments List</h2>
+        <table id="payments">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Date of payment</th>
+                    <th>Student ID</th>
+                    <th>Payment ID</th>
+                </tr>
+            </thead>
+
+<tbody>
+    {% for payment in payments %}
+    <tr>
+        <form class="updateForm" action="/update_payment/{{ payment.id }}" method="POST" style="display: none;">
+            <td><input type="text" name="amount" placeholder="{{ payment.amount }}"></td>
+            <td><input type="text" name="firstName" placeholder="{{ payment.firstName }}"></td>
+            <td><input type="text" name="lastName" placeholder="{{ payment.lastName }}"></td>
+            <td><input type="text" name="dateofpayment" placeholder="{{ payment.dateOfPayment }}"></td>
+            <td><input type="text" name="studentId" placeholder="{{ payment.studentId }}"></td>
+            <td><input type="text" name="paymentId" placeholder="{{ payment.paymentId }}"></td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <td>
+            <form action="/delete_payment/{{payment.id}}"method="post">
+                <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<div class="container">
+<h2>Add new payment</h2>
+<form action="/payments" method="post">
+<label for="studentId">Enter student ID:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
+<label for="paymentDate">Enter payment date:</label>
+<input type="date" id="paymentDate" name="paymentDate" required> <br>
+<label for="value">Enter payment value:</label>
+<input type="text" id="value" name="value" required> <br>
+<button type="submit">Submit</button>
+</form>
+<h2> Link Lecturer with the subject</h2>
+<form action="/link_lecturer" method="post"></form>
+<label for="subjectId">Enter subject ID:</label>
+<input type="text" id="subjectId" name="subjectId" required> <br>
+<label for="lecturerId">Enter lecturer ID:</label>
+<input type="text" id="lecturerId" name="lecturerId" required> <br>
+<button type="submit">Submit</button><br>
+</form>
+</div>
+
+<a href="/">Back to Home</a>
+</body>
+</html>

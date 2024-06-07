@@ -40,11 +40,10 @@ CREATE TABLE `students` (
   `LastName` VARCHAR(255) NOT NULL,
   `EnrollmentDate` DATE NOT NULL,
   `Address` VARCHAR(255),
-  `CourseId` INT NOT NULL,
+  `CourseId` INT,
   PRIMARY KEY (`Id`),
-  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
+  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`)
 );
-
 CREATE TABLE `studentsPayments` (
   `StudentId` INT NOT NULL,
   `PaymentId` INT NOT NULL,

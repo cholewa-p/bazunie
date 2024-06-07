@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects</title>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <h2>Subjects List</h2>
+        <table id="subjects">
+            <thead>
+                <tr>
+                    <th>Subject name</th>
+                    <th>Description</th>
+                    <th>Lecturer First Name</th>
+                    <th>Lecturer Last Name</th>
+                    <th>Subject ID</th>
+                </tr>
+            </thead>
+
+<tbody>
+    {% for subject in subjects %}
+    <tr>
+        <form class="updateForm" action="/update_subject/{{ subject.id }}" method="POST" style="display: none;">
+            <td><input type="text" name="subjectName" placeholder="{{ subject.name }}"></td>
+            <td><input type="text" name="description" placeholder="{{ subject.description }}"></td>
+            <td>{{ subject.lecturerFirstName }}</td>
+            <td>{{ subject.lecturerLastName }}</td>
+            <td>{{ subject.id }}</td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <td>
+            <form action="/delete_subject/{{subject.id}}"method="post">
+                <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<div class="container">
+<h2>Add new subject</h2>
+<form action="/subjects" method="post">
+<label for="name">Enter subject name:</label>
+<input type="text" id="name" name="name" required> <br>
+<label for="description">Enter subjects description:</label>
+<input type="text" id="description" name="description" required> <br>
+<button type="submit">Submit</button>
+</form>
+</div>
+
+<h2> Link Lecturer with the subject</h2>
+<form action="/link_lecturer" method="post"></form>
+<label for="subjectId">Enter subject ID:</label>
+<input type="text" id="subjectId" name="subjectId" required> <br>
+<label for="lecturerId">Enter lecturer ID:</label>
+<input type="text" id="lecturerId" name="lecturerId" required> <br>
+<button type="submit">Submit</button><br>
+</form>
+<a href="/">Back to Home</a>
+</body>
+</html>

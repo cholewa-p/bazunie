@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, jsonify, render_template, Blueprint
 from mysql.connector import Error
 from database import db_connection, db_connection_close
+
 lecturer_route = Blueprint('lecturer', __name__)
 @lecturer_route.route('/lecturers', methods=['GET'])
 def get_lecturers():
@@ -32,9 +33,8 @@ def create_lecturer():
 
     query = """
     INSERT INTO lecturers (FirstName, LastName, Title)
-    Values (%s, %s, %s, %s)
+    Values (%s, %s, %s)
     """
-
     conn = db_connection()
     cursor = conn.cursor()
 

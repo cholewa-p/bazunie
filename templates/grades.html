@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades</title>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <h2>Grades list</h2>
+        <table id="gradesTable">
+            <thead>
+                <tr>
+                    <th>Course name</th>
+                    <th>Subject</th>
+                    <th>Value</th>
+                    <th>Date of receiving</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+            </thead>
+
+<tbody>
+    {% for grade in grades %}
+    <tr>
+        <form class="updateForm" action="/update_grade/{{ grade.id }}" method="POST" style="display: none;">
+            <td>{{ grade.courseName }}</td>
+            <td>{{ grade.subject }}</td>
+            <td><input type="text" name="value" placeholder="{{ grade.value }}"></td>
+            <td><input type="text" name="date" placeholder="{{ grade.date }}"></td>
+            <td>{{ grade.firstName }}</td>
+            <td>{{ grade.lastName }}</td>
+            <input type="hidden" name="grade_id" placeholder="{{ grade.id }}">
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <td>
+            <form action="/delete_grade/{{grade.id}}"method="post">
+                <input type="hidden" name="grade_id" value="{{ grade.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<div class="container">
+<h2>Add new grade</h2>
+<form action="/grades" method="post">
+    <label for="grade">Choose grade:</label>
+    <select name="grade" id="grade">
+      <option value="2.0">2.0</option>
+      <option value="3.0">3.0</option>
+      <option value="3.5">3.5</option>
+      <option value="4.0">4.0</option>
+      <option value="4.5">4.5</option>
+      <option value="5.0">5.0</option>
+    </select> 
+    <br>
+<label for="subject">Enter subject id:</label>
+<input type="text" id="subject" name="subject" required> <br>
+<label for="student">Enter student id:</label>
+<input type="text" id="student" name="student" required> <br>
+
+<button type="submit">Submit</button>
+</form>
+</div>
+<a href="/">Back to Home</a>
+</body>
+</html>

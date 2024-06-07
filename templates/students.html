@@ -17,6 +17,7 @@
                     <th>Last name</th>
                     <th>Enrollment date</th>
                     <th>Address</Address></th>
+                    <th>Student ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,7 @@
                         <td><input type="text" name="lastName" placeholder="{{ student.lastName }}"></td>
                         <td><input type="text" name="enrollmentDate" placeholder="{{ student.enrollmentDate }}"></td>
                         <td><input type="text" name="address" placeholder="{{ student.address }}"></td>
-                        <input type="hidden" name="student_id" placeholder="{{ student.id }}">
+                        <td>{{ student.id }}</td>
                         <td><input type="submit" value="Update"></td>
                     </form>
                     <td>
@@ -56,6 +57,14 @@
             <button type="submit">Submit</button>
         </form>
     </div>
+<h2> Link course with the student</h2>
+<form action="/link_courses" method="post"></form>
+<label for="courseId">Enter course ID:</label>
+<input type="text" id="courseId" name="courseId" required> <br>
+<label for="studentId">Enter student ID:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
+<button type="submit">Submit</button><br>
+</form>
     <a href="/">Back to Home</a>
 </body>
 </html>
