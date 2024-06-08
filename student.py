@@ -15,7 +15,7 @@ def get_students():
     notadded=[]
     if user=='admin':
         query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id"
-        query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL and not s.FirstName = 'admin';"
+        query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL and not s.Login = 'admin';"
     else:
         query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id where s.Id=%s" %id
     try:
