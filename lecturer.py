@@ -51,10 +51,10 @@ def create_lecturer():
     finally:
         db_connection_close(cursor, conn)
 @lecturer_route.route('/link_lecturers', methods=['POST'])
-def link_course():
-    subject_id = request.form['courseId']
-    lecturer_id = request.form['studentId']
-
+def link_lecturer():
+    subject_id = request.form['subjectId']
+    lecturer_id = request.form['lecturerId']
+    print("test")
     query = """
     UPDATE lecturersSubjects SET LecturerId = %s, SubjectId = %s 
     """

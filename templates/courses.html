@@ -81,7 +81,6 @@
 <tbody>
 {% for mycourse in mycourses %}
 <tr>
-    <!-- <form class="updateForm" action="/courses" method="POST" style="display: none;"> -->
         <td>{{ mycourse.name }}</td>
         <td>{{ mycourse.description }}</td>
         <td>{{ mycourse.price }}</td>
@@ -114,22 +113,6 @@
 </div>
 {% endif %}
 {% if user == "admin" %}
-<h2> Link course with the student</h2>
-<form action="/link_courses" method="POST"></form>
-<label for="courseId">Enter course ID:</label>
-<input type="text" id="courseId" name="courseId" required> <br>
-<label for="studentId">Enter student ID:</label>
-<input type="text" id="studentId" name="studentId" required> <br>
-<button type="submit">Submit</button><br>
-</form>
-<h2> Link subject with course</h2>
-<form action="/?#!@" method="POST"></form>
-<label for="courseId">Enter course ID:</label>
-<input type="text" id="courseId" name="courseId" required> <br>
-<label for="subjectId">Enter subject ID:</label>
-<input type="text" id="studentId" name="studentId" required> <br>
-<button type="submit">Submit</button><br>
-</form>
 {% else %}
 <h2> Enroll on courses</h2>
 <form action="/link_courses" method="POST">

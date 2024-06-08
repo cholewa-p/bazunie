@@ -23,19 +23,14 @@
 <tbody>
     {% for grade in grades %}
     <tr>
-        <form class="updateForm" action="/update_grade/{{ grade.id }}" method="POST" style="display: none;">
             <td>{{ grade.subject }}</td>
             <td><input type="text" name="value" placeholder="{{ grade.value }}"></td>
             <td><input type="text" name="date" placeholder="{{ grade.date }}"></td>
             <td><input type="text" name="studentId" placeholder="{{ grade.student_id }}"></td>
             <input type="hidden" name="grade_id" placeholder="{{ grade.id }}">
-            {% if user == "admin" %}
-            <td><input type="submit" value="Update"></td>
-            {% endif %}
-        </form>
         {% if user == "admin" %}
         <td>
-            <form action="/delete_grade/{{grade.id}}"method="post">
+            <form action="/delete_grade"method="POST">
                 <input type="hidden" name="grade_id" value="{{ grade.id }}">
                 <input type="submit" value="Delete">
             </form>

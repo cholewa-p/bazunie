@@ -13,21 +13,17 @@ def get_grades():
     if user=='admin':
         query = "select g.Value, s2.Name , g.DateOfReceive, g.StudentId, g.Id from grades g inner join students s on g.StudentId =s.Id inner join subjects s2 on g.SubjectId =s2.Id;"
     else:
-        query = """ select g.Value, s2.Name , g.DateOfReceive, g.StudentId from grades g 
+        query = """ select g.Value, s2.Name , g.DateOfReceive, g.StudentId , g.Id from grades g 
             inner join students s on g.StudentId =s.Id 
             inner join subjects s2 on g.SubjectId =s2.Id
             WHERE s.Id = %s; """%id
-    # query = """select  c.Name, s.Name, g.Value, g.DateOfReceive, s2.FirstName, s2.LastName,s2.Id from grades g \
-    #             inner join subjects s on g.SubjectId = s.Id 
-    #             inner join courses c on c.Id=s2.CourseId 
-    #             inner join students s2 on s2.Id=g.StudentId"""
     try:
         cursor.execute(query)
         grades = [
             dict(value=row[0], subject=row[1], date=row[2],student_id=row[3],id=row[4])
             for row in cursor.fetchall()
         ]
-        print(grades)
+        # print(grades)
         if grades:
             return render_template('grades.html', grades=grades,user=user)
         else:
@@ -62,10 +58,10 @@ def create_grade():
     finally:
         db_connection_close(cursor, conn)
 # # Route to delete a student
-@grade_route.route('/delete_grade/<int:grade_id>', methods=['POST'])
-def delete_grade(grade_id):
-    grade_id = str(grade_id)
-    # request.form.get['grade_id']
+@grade_route.route('/delete_grade', methods=['POST'])
+def delete_grade():
+    # grade_id = str(grade_id)
+    grade_id=request.form['grade_id']
     print(f"gradeID:{grade_id}")
     query = "DELETE FROM grades WHERE Id = %s"
     conn = db_connection()
@@ -73,10 +69,7 @@ def delete_grade(grade_id):
     try:
         cursor.execute(query, (grade_id,))
         conn.commit()
-        if cursor.rowcount > 0:
-            return redirect('/grades')
-        else:
-            return render_template('error.html', error_message="No grades found")
+        return redirect('/grades')
     except Error as e:
         print(e)
         return render_template('error.html', error_message=e)

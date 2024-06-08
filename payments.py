@@ -59,7 +59,6 @@ def create_payment():
         return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)
-# Route to delete a student
 @payment_route.route('/link_payment', methods=['POST'])
 def link_payment():
     studentId = request.form['studentId']

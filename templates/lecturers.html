@@ -16,18 +16,15 @@
                     <th>First name</th>
                     <th>Last name</th>
                     <th>Title</th>
+                    <th>Lecturer ID</th>
                 </tr>
             </thead>
-
 <tbody>
     {% for lecturer in lecturers %}
     <tr>
         <form class="updateForm" action="/update_lecturer/{{ lecturer.id }}" method="POST" style="display: none;">
             <td><input type="text" name="firstName" placeholder="{{ lecturer.firstName }}"></td>
             <td><input type="text" name="lastName" placeholder="{{ lecturer.lastName }}"></td>
-
-
-            <!-- <td><input type="text" name="title" placeholder="{{ lecturer.title }}"></td> -->
             <td><input list="title" name="title" placeholder="{{ lecturer.title }}">
                 <datalist id="title">
                     <option value="Professor">
@@ -37,6 +34,7 @@
                     <option value="None">
                 </option>
             </td>
+            <td>{{ lecturer.id }}</td>
             {% if user == "admin" %}
             <input type="hidden" name="lecturer_id" placeholder="{{ lecturer.id }}">
             <td><input type="submit" value="Update"></td>
@@ -48,7 +46,6 @@
             </form>
         </td>
         {% endif %}
-
     </tr>
     {% endfor %}
 </tbody>
@@ -57,7 +54,7 @@
 {% if user == "admin" %}
 <div class="container">
 <h2>Add new lecturer</h2>
-<form action="/lecturers" method="post">
+<form action="/lecturers" method="POST">
 <label for="firstName">Enter lecturers First name:</label>
 <input type="text" id="firstName" name="firstName" required> <br>
 <label for="lastName">Enter lecturers Last name:</label>
@@ -73,14 +70,6 @@
 <button type="submit">Submit</button>
 </form>
 </div>
-<h2> Link Lecturer with the subject</h2>
-<form action="/link_lecturer" method="post"></form>
-<label for="subjectId">Enter subject ID:</label>
-<input type="text" id="subjectId" name="subjectId" required> <br>
-<label for="lecturerId">Enter lecturer ID:</label>
-<input type="text" id="lecturerId" name="lecturerId" required> <br>
-<button type="submit">Submit</button><br>
-</form>
 {% endif %}
 <a href="/">Back to Home</a>
 </body>

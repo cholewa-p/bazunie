@@ -11,13 +11,11 @@ def get_students():
     cursor = conn.cursor()
     id=session['student_id']
     user=session['username']
-    print(id)
-    print(user)
     query2=None
     notadded=[]
     if user=='admin':
         query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id"
-        query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL"
+        query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL and not s.FirstName = 'admin';"
     else:
         query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id where s.Id=%s" %id
     try:
@@ -27,14 +25,11 @@ def get_students():
                 dict(id=row[0], firstName=row[1], lastName=row[2])
                 for row in cursor.fetchall()
             ]
-            print(notadded) 
         cursor.execute(query)
         students = [
             dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4],course=row[5])
             for row in cursor.fetchall()
         ]
-        print(students)
-        
         if students:
             return render_template('students.html', students=students,user=user,notadded=notadded)
         else:
@@ -87,7 +82,6 @@ def create_student():
         cursor.execute(query, (first_name, last_name, enrollment_date, address))
         conn.commit()
         return redirect('/students')
-        # return jsonify(message="Student added successfully"), 201
     except Error as e:
         print(e)
         return jsonify(message="An error occured"), 500
