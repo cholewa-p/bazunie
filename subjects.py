@@ -12,7 +12,7 @@ def get_subjects():
     if user=='admin':
         query = "select c.Name,s2.Name, s2.Description, s2.Id,l.FirstName ,l.LastName  from coursesSubjects cs inner join courses c on c.Id = cs.CourseId inner join students s on c.Id = s.CourseId inner join subjects s2 on s2.Id = cs.SubjectId inner join lecturersSubjects ls on ls.SubjectId = s.Id inner join lecturers l on ls.LecturerId =l.Id"
     else:
-        query = "select c.Name,s2.Name, s2.Description, s2.Id,l.FirstName ,l.LastName from coursesSubjects cs inner join courses c on c.Id = cs.CourseId inner join students s on c.Id = s.CourseId inner join subjects s2 on s2.Id = cs.SubjectId inner join lecturersSubjects ls on ls.SubjectId = s.Id inner join lecturers l on ls.LecturerId =l.IdWHERE s.Id =%s;"%id
+        query = "select c.Name,s2.Name, s2.Description, s2.Id,l.FirstName ,l.LastName from coursesSubjects cs inner join courses c on c.Id = cs.CourseId inner join students s on c.Id = s.CourseId inner join subjects s2 on s2.Id = cs.SubjectId inner join lecturersSubjects ls on ls.SubjectId = s.Id inner join lecturers l on ls.LecturerId =l.Id WHERE s.Id =%s;"%id
     # query = """SELECT s.Id, s.Name ,s.Description ,l.FirstName ,l.LastName  from lecturersSubjects ls 
     # inner join subjects s on s.Id = ls.SubjectId 
     # INNER JOIN lecturers l on l.Id = ls.LecturerId;

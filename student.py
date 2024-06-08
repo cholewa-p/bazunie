@@ -11,13 +11,15 @@ def get_students():
     cursor = conn.cursor()
     id=session['student_id']
     user=session['username']
-    query2=None
+    print(id)
     print(user)
+    query2=None
+    notadded=[]
     if user=='admin':
         query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id"
         query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL"
     else:
-        query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id where Id=%s" %id
+        query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id where s.Id=%s" %id
     try:
         if query2:
             cursor.execute(query2)
@@ -27,7 +29,6 @@ def get_students():
             ]
             print(notadded) 
         cursor.execute(query)
-            
         students = [
             dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4],course=row[5])
             for row in cursor.fetchall()
