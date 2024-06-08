@@ -25,8 +25,9 @@ def get_students():
                 dict(id=row[0], firstName=row[1], lastName=row[2])
                 for row in cursor.fetchall()
             ]
-            cursor.execute(query)
             print(notadded) 
+        cursor.execute(query)
+            
         students = [
             dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4],course=row[5])
             for row in cursor.fetchall()
