@@ -13,12 +13,10 @@
         <table id="gradesTable">
             <thead>
                 <tr>
-                    <th>Course name</th>
                     <th>Subject</th>
                     <th>Value</th>
                     <th>Date of receiving</th>
-                    <th>First name</th>
-                    <th>Last name</th>
+                    <th>Student ID</th>
                 </tr>
             </thead>
 
@@ -26,21 +24,23 @@
     {% for grade in grades %}
     <tr>
         <form class="updateForm" action="/update_grade/{{ grade.id }}" method="POST" style="display: none;">
-            <td>{{ grade.courseName }}</td>
             <td>{{ grade.subject }}</td>
             <td><input type="text" name="value" placeholder="{{ grade.value }}"></td>
             <td><input type="text" name="date" placeholder="{{ grade.date }}"></td>
-            <td>{{ grade.firstName }}</td>
-            <td>{{ grade.lastName }}</td>
+            <td><input type="text" name="studentId" placeholder="{{ grade.student_id }}"></td>
             <input type="hidden" name="grade_id" placeholder="{{ grade.id }}">
+            {% if user == "admin" %}
             <td><input type="submit" value="Update"></td>
+            {% endif %}
         </form>
+        {% if user == "admin" %}
         <td>
             <form action="/delete_grade/{{grade.id}}"method="post">
                 <input type="hidden" name="grade_id" value="{{ grade.id }}">
                 <input type="submit" value="Delete">
             </form>
         </td>
+        {% endif %}
 
     </tr>
     {% endfor %}
@@ -48,8 +48,9 @@
 </table>
 </div>
 <div class="container">
+{% if user == "admin" %}
 <h2>Add new grade</h2>
-<form action="/grades" method="post">
+<form action="/grades" method="POST">
     <label for="grade">Choose grade:</label>
     <select name="grade" id="grade">
       <option value="2.0">2.0</option>
@@ -60,14 +61,14 @@
       <option value="5.0">5.0</option>
     </select> 
     <br>
-<label for="subject">Enter subject id:</label>
-<input type="text" id="subject" name="subject" required> <br>
-<label for="student">Enter student id:</label>
-<input type="text" id="student" name="student" required> <br>
-
+<label for="subjectId">Enter subject id:</label>
+<input type="text" id="subjectId" name="subjectId" required> <br>
+<label for="studentId">Enter student id:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
 <button type="submit">Submit</button>
 </form>
 </div>
+{% endif %}
 <a href="/">Back to Home</a>
 </body>
 </html>

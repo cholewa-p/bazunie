@@ -1,6 +1,6 @@
-INSERT INTO students (FirstName, LastName, EnrollmentDate, Address) VALUES
-('John', 'Doe', '2023-09-15', '123 Main Street'),
-('Alice', 'Smith', '2023-08-20', '456 Elm Street'),
+INSERT INTO students (FirstName, LastName, EnrollmentDate, Address, Login, Password ) VALUES
+('John', 'Doe', '2023-09-15', '123 Main Street','john','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi'),
+('Alice', 'Smith', '2023-08-20', '456 Elm Street','alice','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi');
 ('Michael', 'Johnson', '2023-07-10', '789 Oak Street'),
 ('Emily', 'Brown', '2023-06-05', '1011 Pine Street'),
 ('David', 'Wilson', '2023-05-03', '1213 Maple Street');

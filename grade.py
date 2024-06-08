@@ -1,26 +1,37 @@
-from flask import Flask, request, redirect, jsonify, render_template, Blueprint
+from flask import Flask, request, redirect, jsonify, render_template, Blueprint,session
 from mysql.connector import Error
+from datetime import datetime
 from database import db_connection, db_connection_close
-
+# from main import app as grade_app, grade_route
 grade_route = Blueprint('grade', __name__)
 @grade_route.route('/grades', methods=['GET'])
 def get_grades():
     conn = db_connection()
+    id=session['student_id']
+    user=session['username']
     cursor = conn.cursor()
-    query = "select  c.Name, s.Name, g.Value, g.DateOfReceive, s2.FirstName, s2.LastName,s2.Id from grades g \
-                inner join subjects s on g.SubjectId = s.Id \
-                inner join courses c on c.Id=s2.CourseId \
-                inner join students s2 on s2.Id=g.StudentId"
+    if user=='admin':
+        query = "select g.Value, s2.Name , g.DateOfReceive, g.StudentId, g.Id from grades g inner join students s on g.StudentId =s.Id inner join subjects s2 on g.SubjectId =s2.Id;"
+    else:
+        query = """ select g.Value, s2.Name , g.DateOfReceive, g.StudentId from grades g 
+            inner join students s on g.StudentId =s.Id 
+            inner join subjects s2 on g.SubjectId =s2.Id
+            WHERE s.Id = %s; """%id
+    # query = """select  c.Name, s.Name, g.Value, g.DateOfReceive, s2.FirstName, s2.LastName,s2.Id from grades g \
+    #             inner join subjects s on g.SubjectId = s.Id 
+    #             inner join courses c on c.Id=s2.CourseId 
+    #             inner join students s2 on s2.Id=g.StudentId"""
     try:
         cursor.execute(query)
         grades = [
-            dict(courseName=row[0], subject=row[1], value=row[2], date=row[3],firstName=row[4],lastName=row[5],studentId=row[6])
+            dict(value=row[0], subject=row[1], date=row[2],student_id=row[3],id=row[4])
             for row in cursor.fetchall()
         ]
+        print(grades)
         if grades:
-            return render_template('grades.html', grades=grades)
+            return render_template('grades.html', grades=grades,user=user)
         else:
-            return jsonify(message="No grades found"), 404
+            return render_template('error.html', error_message="No grades found")
     except Error as e:
         print(e)
         return jsonify(message=e), 500
@@ -28,20 +39,19 @@ def get_grades():
         db_connection_close(cursor, conn)
 @grade_route.route('/grades', methods=['POST'])
 def create_grade():
-    # data = request.get_json()
     grade = request.form['grade']
-    subject_id = request.form['subject']
-    student_id = request.form['name']
+    subject_id = request.form['subjectId']
+    student_id = request.form['studentId']
 
     query = """
-    INSERT INTO grades (Value, DateOfReceive, SubjectId, EnrollmentId)
-    Values (%s, now(), %s, %s)
+    INSERT INTO grades (Value, DateOfReceive, SubjectId, StudentId)
+    Values (%s, %s, %s, %s)
     """
     conn = db_connection()
     cursor = conn.cursor()
 
     try:
-        cursor.execute(query, (grade, subject_id, student_id))
+        cursor.execute(query, (grade, datetime.now() ,subject_id, student_id))
         conn.commit()
         return redirect('/grades')
         # return jsonify(message="Student added successfully"), 201
@@ -55,8 +65,8 @@ def create_grade():
 @grade_route.route('/delete_grade/<int:grade_id>', methods=['POST'])
 def delete_grade(grade_id):
     grade_id = str(grade_id)
-    request.form.get['grade_id']
-    print(grade_id)
+    # request.form.get['grade_id']
+    print(f"gradeID:{grade_id}")
     query = "DELETE FROM grades WHERE Id = %s"
     conn = db_connection()
     cursor = conn.cursor()
@@ -66,10 +76,10 @@ def delete_grade(grade_id):
         if cursor.rowcount > 0:
             return redirect('/grades')
         else:
-            return jsonify(message="grade not found"), 404
+            return render_template('error.html', error_message="No grades found")
     except Error as e:
         print(e)
-        return jsonify(message="An error occured"), 500
+        return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)
 
@@ -102,9 +112,9 @@ def update_grade(grade_id):
         if cursor.rowcount > 0:
             return redirect('/grades')
         else:
-            return jsonify(message="grade not found"), 404
+            return render_template('error.html', error_message="No grades found")
     except Error as e:
         print(e)
-        return jsonify(message="An error occurred"), 500
+        return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)

@@ -37,6 +37,7 @@
                     <option value="None">
                 </option>
             </td>
+            {% if user == "admin" %}
             <input type="hidden" name="lecturer_id" placeholder="{{ lecturer.id }}">
             <td><input type="submit" value="Update"></td>
         </form>
@@ -46,12 +47,14 @@
                 <input type="submit" value="Delete">
             </form>
         </td>
+        {% endif %}
 
     </tr>
     {% endfor %}
 </tbody>
 </table>
 </div>
+{% if user == "admin" %}
 <div class="container">
 <h2>Add new lecturer</h2>
 <form action="/lecturers" method="post">
@@ -78,6 +81,7 @@
 <input type="text" id="lecturerId" name="lecturerId" required> <br>
 <button type="submit">Submit</button><br>
 </form>
+{% endif %}
 <a href="/">Back to Home</a>
 </body>
 </html>

@@ -36,6 +36,8 @@ CREATE TABLE `payments` (
 -- Table `students`
 CREATE TABLE `students` (
   `Id` INT NOT NULL AUTO_INCREMENT,
+  `Login` VARCHAR(255) NOT NULL,
+  `Password` VARCHAR(255) NOT NULL
   `FirstName` VARCHAR(255) NOT NULL,
   `LastName` VARCHAR(255) NOT NULL,
   `EnrollmentDate` DATE NOT NULL,
@@ -45,9 +47,10 @@ CREATE TABLE `students` (
   FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`)
 );
 CREATE TABLE `studentsPayments` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
   `StudentId` INT NOT NULL,
   `PaymentId` INT NOT NULL,
-  PRIMARY KEY (`StudentId`, `PaymentId`),
+  PRIMARY KEY (`Id`),
   FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`),
   FOREIGN KEY (`PaymentId`) REFERENCES `payments`(`Id`)
 );
@@ -55,18 +58,20 @@ CREATE TABLE `studentsPayments` (
 
 -- Table `lecturersSubjects`
 CREATE TABLE `lecturersSubjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
   `LecturerId` INT NOT NULL,
   `SubjectId` INT NOT NULL,
-  PRIMARY KEY (`LecturerId`, `SubjectId`),
+  PRIMARY KEY (`Id`),
   FOREIGN KEY (`LecturerId`) REFERENCES `lecturers`(`Id`),
   FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
 );
 
 -- Table `coursesSubjects`
 CREATE TABLE `coursesSubjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
   `CourseId` INT NOT NULL,
   `SubjectId` INT NOT NULL,
-  PRIMARY KEY (`CourseId`, `SubjectId`),
+  PRIMARY KEY (`Id`),
   FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
   FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
 );
@@ -75,9 +80,7 @@ CREATE TABLE `coursesSubjects` (
 CREATE TABLE `grades` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Value` DOUBLE NOT NULL,
-  `Percent` DOUBLE NOT NULL,
   `DateOfReceive` DATETIME NOT NULL,
-  `IsFinal` BOOLEAN NOT NULL,
   `SubjectId` INT NOT NULL,
   `StudentId` INT NOT NULL,
   PRIMARY KEY (`Id`),

@@ -1,12 +1,13 @@
-from flask import Flask, request, redirect, jsonify, render_template, Blueprint
+from flask import Flask, request, redirect, jsonify, render_template, Blueprint,session
 from mysql.connector import Error
 from database import db_connection, db_connection_close
-
+# from main import app as app_lecturer, lecturer_route
 lecturer_route = Blueprint('lecturer', __name__)
 @lecturer_route.route('/lecturers', methods=['GET'])
 def get_lecturers():
     conn = db_connection()
     cursor = conn.cursor()
+    user=session['username']
     query = "SELECT * FROM lecturers"
     try:
         cursor.execute(query)
@@ -15,7 +16,7 @@ def get_lecturers():
             for row in cursor.fetchall()
         ]
         if lecturers:
-            return render_template('lecturers.html', lecturers=lecturers)
+            return render_template('lecturers.html', lecturers=lecturers,user=user)
         else:
             return jsonify(message="No lecturers found"), 404
     except Error as e:
@@ -49,7 +50,25 @@ def create_lecturer():
         # return jsonify(message="An error occured"), 500
     finally:
         db_connection_close(cursor, conn)
-# Route to delete a student
+@lecturer_route.route('/link_lecturers', methods=['POST'])
+def link_course():
+    subject_id = request.form['courseId']
+    lecturer_id = request.form['studentId']
+
+    query = """
+    UPDATE lecturersSubjects SET LecturerId = %s, SubjectId = %s 
+    """
+    conn = db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(query, (subject_id, lecturer_id))
+        conn.commit()
+        return redirect('/lecturers')
+    except Error as e:
+        print(e)
+        return render_template('error.html', error_message=e)
+    finally:
+        db_connection_close(cursor, conn)
 @lecturer_route.route('/delete_lecturer/<int:lecturer_id>', methods=['POST'])
 def delete_lecturer(lecturer_id):
     lecturer_id = str(lecturer_id)

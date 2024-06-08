@@ -21,9 +21,10 @@
                 </tr>
             </thead>
 
-<tbody>
-    {% for course in courses %}
-    <tr>
+        <tbody>
+            {% for course in courses %}
+            {% if user == "admin" %}
+            <tr>
         <form class="updateForm" action="/update_course/{{ course.id }}" method="POST" style="display: none;">
             <td><input type="text" name="courseName" placeholder="{{ course.name }}"></td>
             <td><input type="text" name="description" placeholder="{{ course.description }}"></td>
@@ -37,6 +38,7 @@
             </td>
             <!-- <td><input type="text" name="level" placeholder="{{ course.level }}"></td> -->
             <td>{{ course.id }}</td>
+
             <td><input type="submit" value="Update"></td>
         </form>
         <td>
@@ -47,10 +49,51 @@
         </td>
 
     </tr>
+    {% else %}
+    <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.price }}</td>
+        <td>{{ course.level }}</td>
+        <td>{{ course.id }}</td>
+        
+    {% endif %}
+    
     {% endfor %}
 </tbody>
 </table>
 </div>
+<!-- aa -->
+{% if user != "admin" %}
+<div class="container">
+    <h2>My courses</h2>
+    <table id="mycoursesTable">
+        <thead>
+            <tr>
+                <th>Course name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Level</th>
+                <th>Course ID</th>
+            </tr>
+        </thead>
+
+<tbody>
+{% for mycourse in mycourses %}
+<tr>
+    <!-- <form class="updateForm" action="/courses" method="POST" style="display: none;"> -->
+        <td>{{ mycourse.name }}</td>
+        <td>{{ mycourse.description }}</td>
+        <td>{{ mycourse.price }}</td>
+        <td>{{ mycourse.level }} </td>
+        <td>{{ mycourse.id }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+{% if user == "admin" %}
 <div class="container">
 <h2>Add new course</h2>
 <form action="/courses" method="post">
@@ -69,15 +112,33 @@
 <button type="submit">Submit</button>
 </form>
 </div>
-
+{% endif %}
+{% if user == "admin" %}
 <h2> Link course with the student</h2>
-<form action="/link_courses" method="post"></form>
+<form action="/link_courses" method="POST"></form>
 <label for="courseId">Enter course ID:</label>
 <input type="text" id="courseId" name="courseId" required> <br>
 <label for="studentId">Enter student ID:</label>
 <input type="text" id="studentId" name="studentId" required> <br>
 <button type="submit">Submit</button><br>
 </form>
+<h2> Link subject with course</h2>
+<form action="/?#!@" method="POST"></form>
+<label for="courseId">Enter course ID:</label>
+<input type="text" id="courseId" name="courseId" required> <br>
+<label for="subjectId">Enter subject ID:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
+<button type="submit">Submit</button><br>
+</form>
+{% else %}
+<h2> Enroll on courses</h2>
+<form action="/link_courses" method="POST">
+    <label for="courseId">Enter course ID:</label>
+    <input type="text" id="courseId" name="courseId" required> <br>
+    <input type="hidden" id="studentId" name="studentId" value="{{ user_id }}"> <br>
+    <button type="submit">Submit</button><br>
+</form>
+{% endif %}
 <a href="/">Back to Home</a>
 </body>
 </html>

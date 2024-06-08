@@ -14,10 +14,10 @@
             <thead>
                 <tr>
                     <th>Amount</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
                     <th>Date of payment</th>
+                    {% if user == "admin" %}
                     <th>Student ID</th>
+                    {% endif %}
                     <th>Payment ID</th>
                 </tr>
             </thead>
@@ -25,26 +25,21 @@
 <tbody>
     {% for payment in payments %}
     <tr>
-        <form class="updateForm" action="/update_payment/{{ payment.id }}" method="POST" style="display: none;">
+        <form class="updateForm" action="/update_payment/{{ payment.paymentId }}" method="POST" style="display: none;">
             <td><input type="text" name="amount" placeholder="{{ payment.amount }}"></td>
-            <td><input type="text" name="firstName" placeholder="{{ payment.firstName }}"></td>
-            <td><input type="text" name="lastName" placeholder="{{ payment.lastName }}"></td>
             <td><input type="text" name="dateofpayment" placeholder="{{ payment.dateOfPayment }}"></td>
+            {% if user == "admin" %}
             <td><input type="text" name="studentId" placeholder="{{ payment.studentId }}"></td>
+            {% endif %}
             <td><input type="text" name="paymentId" placeholder="{{ payment.paymentId }}"></td>
-            <td><input type="submit" value="Update"></td>
+
         </form>
-        <td>
-            <form action="/delete_payment/{{payment.id}}"method="post">
-                <input type="hidden" name="payment_id" value="{{ payment.id }}">
-                <input type="submit" value="Delete">
-            </form>
-        </td>
 
     </tr>
     {% endfor %}
 </tbody>
 </table>
+{% if user == "admin" %}
 </div>
 <div class="container">
 <h2>Add new payment</h2>
@@ -57,16 +52,17 @@
 <input type="text" id="value" name="value" required> <br>
 <button type="submit">Submit</button>
 </form>
-<h2> Link Lecturer with the subject</h2>
-<form action="/link_lecturer" method="post"></form>
-<label for="subjectId">Enter subject ID:</label>
-<input type="text" id="subjectId" name="subjectId" required> <br>
-<label for="lecturerId">Enter lecturer ID:</label>
-<input type="text" id="lecturerId" name="lecturerId" required> <br>
-<button type="submit">Submit</button><br>
-</form>
 </div>
+<h2>Delete payment</h2>
+<form action="/delete_payment"method="POST">
+<label for="studentId">Enter student ID:</label>
+<input type="text" id="studentId" name="studentId" required> <br>
+<label for="paymentId">Enter payment ID:</label>
+<input type="text" id="paymentId" name="paymentId" required> <br>
+<input type="submit" value="Delete">
+</form>
 
+{% endif %}
 <a href="/">Back to Home</a>
 </body>
 </html>

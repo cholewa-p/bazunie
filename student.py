@@ -1,26 +1,45 @@
-from flask import Flask, request, redirect, jsonify, render_template, Blueprint
+from flask import Flask, request, redirect, jsonify, render_template, Blueprint, session
 from mysql.connector import Error
+from datetime import datetime
 from database import db_connection, db_connection_close
+# from main import session
 # Route to get all students
 student_route = Blueprint('student', __name__)
 @student_route.route('/students', methods=['GET'])
 def get_students():
     conn = db_connection()
     cursor = conn.cursor()
-    query = "SELECT * FROM students"
+    id=session['student_id']
+    user=session['username']
+    query2=None
+    print(user)
+    if user=='admin':
+        query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id"
+        query2="SELECT s.Id, s.FirstName, s.LastName FROM students s where s.CourseId  IS NULL"
+    else:
+        query = "SELECT s.Id,s.FirstName,s.LastName,s.EnrollmentDate,s.Address,courses.Name FROM students s inner join courses on s.CourseId = courses.Id where Id=%s" %id
     try:
-        cursor.execute(query)
+        if query2:
+            cursor.execute(query2)
+            notadded = [
+                dict(id=row[0], firstName=row[1], lastName=row[2])
+                for row in cursor.fetchall()
+            ]
+            cursor.execute(query)
+            print(notadded) 
         students = [
-            dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4])
+            dict(id=row[0], firstName=row[1], lastName=row[2], enrollmentDate=str(row[3]), address=row[4],course=row[5])
             for row in cursor.fetchall()
         ]
+        print(students)
+        
         if students:
-            return render_template('students.html', students=students)
+            return render_template('students.html', students=students,user=user,notadded=notadded)
         else:
             return jsonify(message="No students found"), 404
     except Error as e:
         print(e)
-        return jsonify(message="An error occurred"), 500
+        return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)
 
@@ -40,7 +59,7 @@ def get_student(student_id):
             return jsonify(message="Student not found"), 404
     except Error as e:
         print(e)
-        return jsonify(message="An error occurred"), 500
+        return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)
 
@@ -50,12 +69,13 @@ def create_student():
     # data = request.get_json()
     first_name = request.form['firstName']
     last_name = request.form['lastName']
-    enrollment_date = request.form['enrollmentDate']
+    enrollment_date = datetime.now()
+    # request.form['enrollmentDate']
     address = request.form['address']
 
     query = """
-    INSERT INTO students (FirstName, LastName, EnrollmentDate, Address)
-    Values (%s, %s, %s, %s)
+    INSERT INTO students (FirstName, LastName, EnrollmentDate, Address, Login, Password)
+    Values (%s, %s, %s, %s, 'test', 'test')
     """
 
     conn = db_connection()
@@ -87,10 +107,10 @@ def delete_student(student_id):
         if cursor.rowcount > 0:
             return redirect('/students')
         else:
-            return jsonify(message="Student not found"), 404
+            return render_template('error.html', error_message="Student not found")
     except Error as e:
         print(e)
-        return jsonify(message="An error occured"), 500
+        return render_template('error.html', error_message=e)
     finally:
         db_connection_close(cursor, conn)
 
@@ -101,7 +121,6 @@ def update_student(student_id):
     # data = request.get_json()
     first_name = request.form['firstName']
     last_name = request.form['lastName']
-    enrollment_date = request.form['enrollmentDate']
     address = request.form['address']
 
     conn = db_connection()
@@ -117,9 +136,6 @@ def update_student(student_id):
     if last_name:
         fields.append("LastName = %s")
         values.append(last_name)
-    if enrollment_date:
-        fields.append("EnrollmentDate = %s")
-        values.append(enrollment_date)
     if address is not None:  # address can be an empty string to remove the address
         fields.append("Address = %s")
         values.append(address)

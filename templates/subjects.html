@@ -13,11 +13,12 @@
         <table id="subjects">
             <thead>
                 <tr>
+                    <th>Course name</th>
                     <th>Subject name</th>
                     <th>Description</th>
-                    <th>Lecturer First Name</th>
-                    <th>Lecturer Last Name</th>
                     <th>Subject ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                 </tr>
             </thead>
 
@@ -25,25 +26,30 @@
     {% for subject in subjects %}
     <tr>
         <form class="updateForm" action="/update_subject/{{ subject.id }}" method="POST" style="display: none;">
-            <td><input type="text" name="subjectName" placeholder="{{ subject.name }}"></td>
+            <td>{{ subject.courseName }}</td>
+            <td><input type="text" name="subjectName" placeholder="{{ subject.subjectName }}"></td>
             <td><input type="text" name="description" placeholder="{{ subject.description }}"></td>
-            <td>{{ subject.lecturerFirstName }}</td>
-            <td>{{ subject.lecturerLastName }}</td>
-            <td>{{ subject.id }}</td>
+            <td>{{ subject.firstName }}</td>
+            <td>{{ subject.lastName }}</td>
+            <td>{{ subject.subjectId }}</td>
+            {% if user == "admin" %}
             <td><input type="submit" value="Update"></td>
+            {% endif %}
         </form>
+        {% if user == "admin" %}
         <td>
             <form action="/delete_subject/{{subject.id}}"method="post">
                 <input type="hidden" name="subject_id" value="{{ subject.id }}">
                 <input type="submit" value="Delete">
             </form>
         </td>
-
+        {% endif %}
     </tr>
     {% endfor %}
 </tbody>
 </table>
 </div>
+{% if user == "admin" %}
 <div class="container">
 <h2>Add new subject</h2>
 <form action="/subjects" method="post">
@@ -55,14 +61,8 @@
 </form>
 </div>
 
-<h2> Link Lecturer with the subject</h2>
-<form action="/link_lecturer" method="post"></form>
-<label for="subjectId">Enter subject ID:</label>
-<input type="text" id="subjectId" name="subjectId" required> <br>
-<label for="lecturerId">Enter lecturer ID:</label>
-<input type="text" id="lecturerId" name="lecturerId" required> <br>
-<button type="submit">Submit</button><br>
-</form>
+{% endif %}
+
 <a href="/">Back to Home</a>
 </body>
 </html>
