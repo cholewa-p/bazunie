@@ -1,3 +1,140 @@
+-- Table `lecturers`
+CREATE TABLE `lecturers` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `FirstName` VARCHAR(255) NOT NULL,
+  `LastName` VARCHAR(255) NOT NULL,
+  `Title` VARCHAR(255),
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `subjects`
+CREATE TABLE `subjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  `Description` TEXT,
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `courses`
+CREATE TABLE `courses` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  `Description` TEXT,
+  `Price` DECIMAL(10, 2),
+  `Level` VARCHAR(255),
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `payments`
+CREATE TABLE `payments` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `DateOfPayment` DATETIME NOT NULL,
+  `Amount` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`Id`)
+);
+
+-- Table `students`
+CREATE TABLE `students` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Login` VARCHAR(255) NOT NULL,
+  `Password` VARCHAR(255) NOT NULL,
+  `FirstName` VARCHAR(255) NOT NULL,
+  `LastName` VARCHAR(255) NOT NULL,
+  `EnrollmentDate` DATE NOT NULL,
+  `Address` VARCHAR(255),
+  `CourseId` INT,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`)
+);
+CREATE TABLE `studentsPayments` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `StudentId` INT NOT NULL,
+  `PaymentId` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`),
+  FOREIGN KEY (`PaymentId`) REFERENCES `payments`(`Id`)
+);
+
+
+-- Table `lecturersSubjects`
+CREATE TABLE `lecturersSubjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `LecturerId` INT NOT NULL,
+  `SubjectId` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`LecturerId`) REFERENCES `lecturers`(`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
+);
+
+-- Table `coursesSubjects`
+CREATE TABLE `coursesSubjects` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `CourseId` INT NOT NULL,
+  `SubjectId` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`CourseId`) REFERENCES `courses`(`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`)
+);
+
+-- Table `grades`
+CREATE TABLE `grades` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Value` DOUBLE NOT NULL,
+  `DateOfReceive` DATETIME NOT NULL,
+  `SubjectId` INT NOT NULL,
+  `StudentId` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  FOREIGN KEY (`SubjectId`) REFERENCES `subjects`(`Id`),
+  FOREIGN KEY (`StudentId`) REFERENCES `students`(`Id`)
+);
+INSERT INTO courses (Id, Name, Description,Price, Level) VALUES
+(1, 'Java 101','Inroduction to Java',700,'Beginner'),
+(2, 'Python 101','Inroduction to Python',1000,'Beginner'),
+(3, 'Project Management 101','Inroduction to Project Management',500,'Beginner');
+INSERT INTO students (FirstName, LastName, EnrollmentDate, Address, Login, Password,CourseId  ) VALUES
+('John', 'Doe', '2023-09-15', '123 Main Street','john','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi',1),
+('Alice', 'Smith', '2023-08-20', '456 Elm Street','alice','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi',1),
+('Tom', 'Doe', '2023-09-15', '123 Main Street','tom','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi',3);
+INSERT INTO lecturers (FirstName, LastName, Title) VALUES
+('John', 'Doe', 'Professor'),
+('Alice', 'Smith', 'Associate Professor'),
+('Michael', 'Johnson', 'Assistant Professor'),
+('Michael', 'Johnson', 'Assistant Professor'),
+('David', 'Lee', 'Lecturer');
+INSERT INTO payments (Id, Amount, DateOfPayment) VALUES
+(1, 1000, '2023-01-10'),
+(2, 1500, '2023-02-15'),
+(3, 1200, '2023-03-20');
+insert into studentsPayments (StudentId,PaymentId) values
+(1,1),
+(1,2),
+(2,3);
+INSERT INTO `subjects` (`Name`, `Description`) VALUES
+('Object-Oriented Programming in Java', 'This subject covers the principles of object-oriented programming (OOP) using the Java programming language. It includes concepts such as classes, objects, inheritance, polymorphism, encapsulation, and abstraction.'),
+('Machine Learning in Python', 'This subject explores machine learning concepts and techniques using the Python programming language. It includes topics such as supervised learning, unsupervised learning, neural networks, and the use of libraries like TensorFlow and scikit-learn.'),
+('Agile Project Management', 'This subject focuses on Agile project management methodologies, including Scrum and Kanban. It covers principles and practices for managing projects in a flexible and iterative manner, with an emphasis on collaboration, customer feedback, and continuous improvement.'),
+('Data Structures and Algorithms in Java', 'This subject provides an in-depth look at data structures and algorithms using Java. It includes topics such as arrays, linked lists, stacks, queues, trees, graphs, and sorting/searching algorithms.'),
+('Web Development with Python and Flask', 'This subject teaches web development using the Python programming language and the Flask web framework. It covers topics such as routing, templates, forms, and database integration.'),
+('Project Risk Management', 'This subject addresses the identification, assessment, and management of risks in project management. It includes strategies for mitigating risks and ensuring project success despite uncertainties.');
+insert into coursesSubjects (CourseId,SubjectId) values
+(1,1),
+(2,2),
+(3,3),
+(1,4),
+(2,5),
+(3,6);
+insert into lecturersSubjects (LecturerId,SubjectId) values
+(1,1),
+(2,2),
+(3,3),
+(3,4),
+(4,5),
+(5,6);
+insert into grades (Value,DateOfReceive,SubjectId,StudentId) values
+(5.0,now(),1,1),
+(4.0,now(),4,1);
+
+############################################################################
 INSERT INTO students (FirstName, LastName, EnrollmentDate, Address, Login, Password ) VALUES
 ('John', 'Doe', '2023-09-15', '123 Main Street','john','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi'),
 ('Alice', 'Smith', '2023-08-20', '456 Elm Street','alice','$2b$12$GEsNjTQLRCKm01tm6EfRjOsfLKQlq0TC7VgP7ZEGLtojkL6ZGXCCi');
